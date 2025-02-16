@@ -45,6 +45,8 @@ pub fn ReadArbitraryType(mem_alloc: std.mem.Allocator) !ArbitraryType {
     if (read_sze == last_pos) {
         const size = std.mem.bytesToValue(u64, arbitrary_buffer[0..8]);
         const str: []u8 = try mem_alloc.alloc(u8, size);
+        // Zero out the u8 array to ensure no trash values
+        // are present when populated.
         @memset(str, 0);
         var ii: u64 = 0;
         while (ii < size and (ii+8) < last_pos) : (ii += 1) {
